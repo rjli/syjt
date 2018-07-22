@@ -23,6 +23,7 @@
 <script>
 import wepy from 'wepy'
 import regions from '@/utils/regions.js';
+import api from '@/api/api';
 
 export default class AreaPicker extends wepy.component {
   data = {
@@ -83,6 +84,7 @@ export default class AreaPicker extends wepy.component {
 
   //点击事件，点击弹出选择页
   openAddressPicker() {
+    this.getProvinceList();
     this.initAddressPicker();
     this.showPicker();
   }
@@ -135,9 +137,47 @@ export default class AreaPicker extends wepy.component {
     }
   }
 
+  async getProvinceList() {
+    const json = await api.getProvinceList({
+      query: {}
+    });
+    if (json.data) {
+        //将省的数据存到provinces这个数组中
+      let provinces = json.data.list;
+      //检查传入的省编码是否有，有的话，选中column第一个游标为province index
+      provinces.some((item, index) => {
+        if (province && item.id == province.id) {
+          defaultValue[0] = item.id;
+          return true;
+        }
+      });
+      this.provinces = provinces;
+      const rCities = getCityList(defaultValue[0]);
+      // this.$apply();
+    } else {}
+
+  }
+
+async getCityList(provinceId){
+  const json = await api.getProvinceList({
+    query: {sheng:provinceId}
+  });
+  if (json.data) {
+      //将省的数据存到provinces这个数组中
+    let rCities = json.data.list;
+    const hasCity = cities.some((item, index) => {
+      if (city && item.id == city.id) {
+        defaultValue[1] = index;
+        return true;
+      }
+    });
 
 
+    console.log('执行了区级判断');
 
+    const rAreas = rCities[defaultValue[1]].areas;
+  } else {}
+}
 
 
   //这里是判断省市名称的显示
@@ -156,7 +196,6 @@ export default class AreaPicker extends wepy.component {
       provinces.push({ name: regions[i].name, code: regions[i].code });
     }
 
-
     //检查传入的省编码是否有，有的话，选中column第一个游标为province index
     provinces.some((item, index) => {
       if (province && item.code == province.code) {
@@ -164,7 +203,6 @@ export default class AreaPicker extends wepy.component {
         return true;
       }
     });
-
 
     const rCities = regions[defaultValue[0]].cities;
 

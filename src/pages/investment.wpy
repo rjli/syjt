@@ -1,0 +1,109 @@
+<template>
+  <view class="points">
+    <image src="../images/bc_qdyl.png" class="head_bc"></image>
+    <view class="jf_content">
+      <view class="action-input">
+        <input cursor-spacing="20" name="number" placeholder="姓名" />
+      </view>
+      <view  class="action-input">
+        <input cursor-spacing="20" name="number" placeholder="电话" />
+      </view>
+      <view class="content">
+         <textarea placeholder='其他' show-confirm-bar="{{false}}" bindblur="onProblemBlur" cursor-spacing="20"></textarea>
+       </view>
+       <button class='btn-common' disabled="{{disabled}}" catchtap='onProblemTap'> 提交</button>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+import api from '@/api/api';
+import {
+  SYSTEM_INFO,
+  USER_SPECICAL_INFO,
+  USER_INFO
+} from '@/utils/constant';
+import PointsDetail from '@/components/points_detail'
+export default class Points extends wepy.page {
+  config = {
+    navigationBarTitleText: '投资加盟',
+  }
+  components = {
+    pointsDetail: PointsDetail
+  }
+
+  data = {
+    winHeight: 0
+  }
+
+  events = {
+  }
+
+  onLoad() {
+    let that = this;
+    let systemInfo = wepy.getStorageSync(SYSTEM_INFO);
+    that.winHeight = systemInfo.windowHeight;
+    console.log("winHeight===",that.winHeight);
+    that.$apply();
+  }
+  computed = {
+
+  }
+  methods = {
+
+  }
+  events = {
+
+  }
+}
+
+</script>
+<style lang="less">
+.points {
+  background: #f2f2f2;
+}
+.head_bc {
+  height: 350rpx;
+  width: 100%;
+}
+.jf_content {
+  padding: 0 40rpx;
+}
+
+
+
+.jf {
+  font-size: 32rpx;
+  color: #fff;
+  padding: 50rpx 0rpx 10rpx 35rpx;
+}
+
+.action-input {
+  padding-left: 20rpx;
+  margin-top: 30rpx;
+  background-color: #fff;
+}
+
+.action-input input {
+  width: 90%;
+  padding: 20rpx 0;
+  font-size: 24rpx;
+}
+.content textarea {
+  padding: 20rpx;
+  margin: 20rpx 0;
+  height: 260rpx;
+  width: 94%;
+  font-size: 24rpx;
+  /* border: 1px solid grey; */
+  border-radius: 10rpx;
+  background-color: white;
+}
+.btn-common {
+  background-color: #1aad19;
+  margin: 30rpx auto 30rpx;
+  text-align: center;
+  color: #fff;
+}
+
+</style>

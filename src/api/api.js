@@ -15,8 +15,9 @@ const wechatUrl = 'https://api.weixin.qq.com'
 const getDiscoverList = (params) => wxRequest(params, apiMall + '/goods/list?cateidOne=1&cateidTwo=0&price=0&sales=2');
 
 //微信的jscode换取sessionKey
-const wxJsCode2Session = (params) => wxRequest(params, wechatUrl + "/api/wechat/jscode2session");
+const wxJsCode2Session = (params) => wxRequest(params, apiMall + "/Xcx-Shjt1-getOpenid");
 const user2session = (params) => wxRequest(params, apiMall + "/api/wechat/user2session?jsoncallback=?");
+const login =  (params) => wxRequest(params, apiMall + "/Xcx-Shjt2-loginAuthlogin");
 
 //商品接口---begin
 //首页发现商品接口
@@ -146,12 +147,12 @@ const childGoodsCatetoryList = (params) => wxRequest(params, apiMall + '/Xcx-Shj
 const getAdList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt1-index');
 
 // 获取选择地址列表 begin  add 2018/07/22
-// 获取省级数据
-const getProvinceList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-addressGet_province');
-// 获取市级数据
-const getCityList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-addressGet_city');
-// 获取区级、县级数据
-const getAreaList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-addressGet_area');
+// // 获取省级数据
+// const getProvinceList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-addressGet_province');
+// // 获取市级数据
+// const getCityList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-addressGet_city');
+// // 获取区级、县级数据
+// const getAreaList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-addressGet_area');
 
 // 获取选择地址列表 end
 export default {
@@ -205,7 +206,5 @@ export default {
   getPayOrderDetail,
   getAdList,
   getSignDate,
-  getProvinceList,
-  getCityList,
-  getAreaList
+  login
 }

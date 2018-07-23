@@ -8,22 +8,23 @@
       </block>
     </swiper>
     <view class="pos">
-      <!-- <view class="search_read_only">
+      <view class="search_read_only">
         <navigator class="search_content" open-type="navigate" url="/pages/search">
           <i class="iconfont icon-search"></i>
           <view class="search_input">搜索商品</view>
         </navigator>
-        <navigator class="message" url="/pages/messages">
+        <!-- <navigator class="message" url="/pages/messages">
           <i class="iconfont icon-message cfff"></i>
           <view class="doc cfff">消息</view>
-        </navigator>
-      </view> -->
+        </navigator> -->
+      </view>
     </view>
+
     <view class="nav_list">
       <block wx:for="{{proCateData}}" wx:key="key">
         <navigator open-type="navigate" @tap="goToProCateDetail()">
           <image src="{{item.photo}}" class="nav_icon"></image>
-          <view class="nav_text">{{ietm.name}}</view>
+          <view class="nav_text">{{item.name}}</view>
         </navigator>
       </block>
       <!-- <navigator open-type="navigate" url="/pages/exchange_goods">
@@ -39,6 +40,17 @@
         <view class="nav_text">我要补货</view>
       </navigator> -->
     </view>
+     <view class="notify">
+        <view class="notify-title">通知</view>
+        <swiper class="swiper-notify"  vertical="{{true}}"  indicator-dots="{{false}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" circular="true">
+          <block wx:for="{{adList}}" wx:key="key">
+            <swiper-item>
+                <text>行政通知</text>
+            </swiper-item>
+          </block>
+        </swiper>
+    </view>
+
 
     <!-- 产品四宫格 -->
     <view class="grids-title">
@@ -52,7 +64,6 @@
          <view  class="grid-text">
             <text>{{item.name}}</text>
          </view>
-
       </view>
     </view>
 
@@ -132,7 +143,7 @@ export default class Home extends wepy.page {
     } else {
       tip.error(json.data.msg);
     }
-    that.showLoading = false;
+    that.showLoading = false; 
   }
   async getAdList() {
     const json = await api.getAdList({
@@ -141,7 +152,15 @@ export default class Home extends wepy.page {
     if (json.data) {
       let adList = json.data.ggtop;
       this.adList = adList;
-      this.proCateData = json.data.proCateData;
+      let proCateData =  json.data.proCateData;
+      // if(json.data.proCateData.length <4){
+      //   console.log(json.data.proCateData.length)
+      //   for(let i= 0; i< 4-json.data.proCateData.length ; i++){
+      //     let item = {id:"",name:"",photo:"",bz_1:""};
+      //       proCateData.push(item);
+      //   }
+      // }
+      this.proCateData = proCateData;
       this.prolist = json.data.prolist;
       this.$apply();
     } else {}
@@ -185,7 +204,12 @@ export default class Home extends wepy.page {
     },
     closeAlert() {
      // tip.alert('关闭');
-    }
+   },
+   getPhoneNumber(res) {
+     console.log(res.detail.errMsg)
+       console.log(res.detail.iv)
+       console.log(res.detail.encryptedData)
+   }
   }
   events = {}
   //加载更多
@@ -222,7 +246,7 @@ export default class Home extends wepy.page {
 
 .pos {
   position: absolute;
-  top: 0rpx;
+  top: 10rpx;
   left: 0;
   right: 0;
   .search_content {
@@ -243,8 +267,21 @@ export default class Home extends wepy.page {
     display: block;
   }
 }
-
-
+.notify{
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+.notify-title{
+  padding: 20rpx;
+  border-left: 4px solid red;
+}
+.swiper-notify{
+  width:80%;
+  height: 40rpx;
+  padding:20rpx;
+}
 .nav_list {
   color: #404040;
   display: flex;
@@ -277,8 +314,8 @@ export default class Home extends wepy.page {
 .grids-title{
   text-align: center;
   padding: 20rpx 0;
-  margin-top: 20rpx;
-  border-top: 4px solid #ddd;
+  // margin-top: 20rpx;
+  // border-top: 4px solid #ddd;
   border-bottom: 1px solid #ddd;
 }
 

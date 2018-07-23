@@ -22,7 +22,7 @@ export default class Authorize extends wepy.page {
   }
   async onLoad() {
     let res = await wepy.getSetting()
-    if ((res.authSetting)['scope.userInfo']) {
+    if ((res.authSetting)['scope.userInfo'] && wepy.getSystemInfoSync() != null ) {
       wepy.switchTab({
         url: '/pages/home'
       })
@@ -32,39 +32,51 @@ export default class Authorize extends wepy.page {
     if (e.detail.errMsg == 'getUserInfo:ok') {
       let res = await wepy.login();
       if (res.code) {
-        console.log(res.code+","+e.detail.userInfo.nickName);
+        console.log(e.detail.userInfo);
         wepy.setStorageSync(USER_INFO, e.detail.userInfo);
         let systemInfo = wepy.getSystemInfoSync();
         wepy.setStorageSync(SYSTEM_INFO, systemInfo);
         let rlt = await api.wxJsCode2Session({
           query: {
-            jsCode: res.code,
-            nickName: e.detail.userInfo.nickName
+            code:res.code
           }
         })
-      if (rlt.data.result) {
+      if (rlt.data) {
           let data = rlt.data;
-          if (data.data.openid) {
-            wepy.setStorageSync(USER_SPECICAL_INFO, data.data);
-            wepy.switchTab({
-              url: '/pages/home'
-            })
+          console.log(data);
+          if (data.openid) {
+            console.log(wepy.getStorageSync(USER_SPECICAL_INFO));
+            wepy.setStorageSync(USER_SPECICAL_INFO, data);
+             this.login(data.openid,e.detail.userInfo.nickName,e.detail.userInfo.avatarUrl,e.detail.userInfo.gender);
+
+            // wepy.switchTab({
+            //   url: '/pages/home'
+            // })
           }
         } else {
           let res = await wepy.showModal({
             title: 'appid有误',
             content: '授权失败'
           })
-          if (res.confirm) {
-            wepy.switchTab({
-              url: '/pages/home'
-            })
-          }
         }
-
       }
     }
   }
+  async login(openid,nickName,avatarUrl,gender){
+    const json = await api.login({
+      query: {
+        openid: openid,
+        NickName: nickName,
+        HeadUrl: avatarUrl,
+        gender: gender==2? '女':'男',
+        tel:""
+      }
+    });
+    if (json.data) {
+       console.log(json.data);
+    } else {}
+  }
+
   methods = {
 
   }

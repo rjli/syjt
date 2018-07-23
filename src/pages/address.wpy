@@ -78,14 +78,14 @@ export default class Address extends wepy.page {
 
   onLoad(option) {
     this.currentPage = 0;
-    this.getUserAddress();
+  //  this.getUserAddress();
     this.type = (option.type==undefined?"":option.type);
     this.$invoke("addressList","setOrgType", this.type);
   }
 
   onShow(){
     let that = this;
-    this.getUserAddress();
+    // this.getUserAddress();
   }
   computed = {
 

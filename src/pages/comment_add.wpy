@@ -24,7 +24,7 @@ export default class goodsComment extends wepy.page {
     navigationBarTitleText: '商品评论',
   }
   data = {
-    
+
   }
   onLoad() {
 

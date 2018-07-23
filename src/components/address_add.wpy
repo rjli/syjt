@@ -40,11 +40,29 @@
           <input type="text" name="mobile" />
         </view>
       </view>
+      <view>
+
+      </view>
       <view class="list_item">
         <view class="title">所在地区:</view>
         <view class="input">
-          <view @tap="openAddressPicker">{{province ? province.name : '省'}} - {{city ? city.name : '市' }} - {{area ? area.name : '区' }}</view>
-          <areaPicker @areaArray.user="areaPickerArray"></areaPicker>
+          <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+              <view class="picker">
+                 {{region[0]}} - {{region[1]}} - {{region[2]}}
+              </view>
+            </picker>
+
+          <!-- <view @tap="openAddressPicker">{{province ? province.name : '省'}} - {{city ? city.name : '市' }} - {{area ? area.name : '区' }}</view>
+          <areaPicker @areaArray.user="areaPickerArray"></areaPicker> -->
+        </view>
+      </view>
+       <picker>
+
+       </picker>
+      <view class="list_item">
+        <view class="title">邮政编码:</view>
+        <view class="input">
+          <input type="text" name="addressDetail" value="{{postcode}}"/>
         </view>
       </view>
       <view class="list_item">
@@ -53,12 +71,12 @@
           <input type="text" name="addressDetail"/>
         </view>
       </view>
-      <view class="list_item">
+      <!-- <view class="list_item">
         <view class="title">设置默认地址:</view>
         <view class="input tr" @tap="changeCheckBoxState">
           <icon type="success" size="20" color="{{isDefult? 'red':'#999'}}" />
         </view>
-      </view>
+      </view> -->
     </view>
     <view class="btn_box">
       <button class="button type_red" formType="submit">完成</button>
@@ -69,23 +87,20 @@
 import wepy from 'wepy';
 import tip from '@/utils/tip';
 import api from "@/api/api";
+import postcodeUtil from "@/utils/postcode";
 import {
   USER_SPECICAL_INFO
 } from '@/utils/constant';
-import AreaPicker from "./common/wepy-area-picker"
 export default class AddressAdd extends wepy.component {
   data = {
     isDefult: false,
-    province: '',
-    city: '',
-    area: '',
-    provinceCode: '',
-    cityCode: '',
-    areaCode: ''
+    region: ['请选择', '请选择', '请选择'],
+    customItem: '请选择',
+    postcode:''
   }
 
   components = {
-    areaPicker: AreaPicker
+    // areaPicker: AreaPicker
   }
 
   async addAddress(address) {
@@ -98,12 +113,12 @@ export default class AddressAdd extends wepy.component {
     let openId = userSpecialInfo.openid;
     const json = await api.saveAddress({
       query: {
-        openId: openId,
-        address: address,
-        isDef: isDefult,
-        province:that.provinceCode,
-        city:that.cityCode,
-        area:that.areaCode
+        // openId: openId,
+        // address: address,
+        // isDef: isDefult,
+        // province:that.provinceCode,
+        // city:that.cityCode,
+        // area:that.areaCode
       }
     });
     if (json.data.code == 0) {
@@ -143,16 +158,12 @@ export default class AddressAdd extends wepy.component {
       }
       this.addAddress(e.detail.value);
     },
-    openAddressPicker() {
-      this.$invoke('areaPicker', 'openAddressPicker');
-    },
-    areaPickerArray(province, city, area) {
-      this.province = province;
-      this.city = city;
-      this.area = area;
-      this.provinceCode = province.code;
-      this.cityCode = city.code;
-      this.areaCode = area.code;
+
+    bindRegionChange: function (e) {
+      this.region= e.detail.value;
+      let _postcode =   postcodeUtil.findPostCode(this.region[0],this.region[1],this.region[2]);
+      console.log(_postcode);
+      this.postcode = _postcode;
       this.$apply();
     }
   }

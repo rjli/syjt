@@ -7,7 +7,7 @@
       </view>
     </view>
     <view class="info_block">
-      <navigator class="item" url="/pages/register" wx:if="{{bShowBind}}">
+      <!-- <navigator class="item" url="/pages/register" wx:if="{{bShowBind}}">
         <view>
           <view class="item_content">
             <image class="item_img" src="../images/icon_my_01.png"></image>
@@ -16,7 +16,7 @@
           <view class="tip">绑定手机号可更好的让我们服务好您！</view>
         </view>
         <view class="arrow">&gt;</view>
-      </navigator>
+      </navigator> -->
       <navigator class="item" url="/pages/order">
         <view class="item_content">
           <image class="item_img" src="../images/icon_my_02.png"></image>
@@ -86,7 +86,7 @@ import {
 } from '@/utils/constant';
 export default class Index extends wepy.page {
   config = {
-    navigationBarTitleText: '我',
+    navigationBarTitleText: '个人中心',
   }
   components = {
 
@@ -123,6 +123,8 @@ export default class Index extends wepy.page {
   onLoad() {
     let that = this;
     let userInfo = wepy.getStorageSync(USER_INFO);
+    console.log("info-----")
+    console.log(userInfo);
     that.avatarUrl = userInfo.avatarUrl;
     that.nickName = userInfo.nickName;
   }

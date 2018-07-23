@@ -43,8 +43,11 @@
       <view class="list_item">
         <view class="title">所在地区:</view>
         <view class="input">
-          <view @tap="openAddressPicker">{{province ? province.name : '省'}} - {{city ? city.name : '市' }} - {{area ? area.name : '区' }}</view>
-          <areaPicker @areaArray.user="areaPickerArray"></areaPicker>
+          <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+              <view class="picker">
+                 {{region[0]}} - {{region[1]}} - {{region[2]}}
+              </view>
+            </picker>
         </view>
       </view>
       <view class="list_item">
@@ -72,7 +75,6 @@ import api from "@/api/api"
 import {
   USER_SPECICAL_INFO
 } from '@/utils/constant';
-import AreaPicker from "./common/wepy-area-picker"
 export default class AddressEdit extends wepy.component {
 
   data = {
@@ -83,16 +85,10 @@ export default class AddressEdit extends wepy.component {
       type: Object
     },
     id: '',
-    province: '',
-    city: '',
-    area: '',
-    provinceCode: '',
-    cityCode: '',
-    areaCode: ''
+    region: ['请选择', '请选择', '请选择']
   }
 
   components = {
-    areaPicker: AreaPicker
   }
   async editAddress(address) {
     console.log("保存");
@@ -171,17 +167,11 @@ export default class AddressEdit extends wepy.component {
 
       this.$apply();
     },
-    openAddressPicker() {
-      this.$invoke('areaPicker', 'openAddressPicker');
-    },
-    areaPickerArray(province, city, area) {
-      this.province = province;
-      this.city = city;
-      this.area = area;
-
-      this.provinceCode = province.code;
-      this.cityCode = city.code;
-      this.areaCode = area.code;
+    bindRegionChange: function (e) {
+      this.region= e.detail.value;
+      let _postcode =   postcodeUtil.findPostCode(this.region[0],this.region[1],this.region[2]);
+      console.log(_postcode);
+      this.postcode = _postcode;
       this.$apply();
     }
   }

@@ -51,9 +51,6 @@
                  {{region[0]}} - {{region[1]}} - {{region[2]}}
               </view>
             </picker>
-
-          <!-- <view @tap="openAddressPicker">{{province ? province.name : '省'}} - {{city ? city.name : '市' }} - {{area ? area.name : '区' }}</view>
-          <areaPicker @areaArray.user="areaPickerArray"></areaPicker> -->
         </view>
       </view>
        <picker>
@@ -100,7 +97,6 @@ export default class AddressAdd extends wepy.component {
   }
 
   components = {
-    // areaPicker: AreaPicker
   }
 
   async addAddress(address) {
@@ -109,7 +105,7 @@ export default class AddressAdd extends wepy.component {
     let isDefult = 0;
     if (this.isDefult) {
       isDefult = 1;
-    }
+    } 
     let openId = userSpecialInfo.openid;
     const json = await api.saveAddress({
       query: {

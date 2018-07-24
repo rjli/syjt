@@ -96,6 +96,7 @@ export default class Classify extends wepy.page {
     let that = this;
     let systemInfo = wx.getStorageSync(SYSTEM_INFO);
     this.windowHeight = systemInfo.windowHeight;
+    console.log( "windowHeight:"+ this.windowHeight);
     this.$apply();
 
   }

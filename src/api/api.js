@@ -3,9 +3,7 @@ import {
 } from '@/utils/wxRequest';
 
 let env = "-test" //-dev 或者 -test
-// const apiMall = 'https://sujiefs.com/'
 const apiMall = 'https://www.hrkjwx.com'
-const wechatUrl = 'https://api.weixin.qq.com'
 
 /**
  * 获取发现好商品接口
@@ -16,7 +14,7 @@ const getDiscoverList = (params) => wxRequest(params, apiMall + '/goods/list?cat
 
 //微信的jscode换取sessionKey
 const wxJsCode2Session = (params) => wxRequest(params, apiMall + "/Xcx-Shjt1-getOpenid");
-const user2session = (params) => wxRequest(params, apiMall + "/api/wechat/user2session?jsoncallback=?");
+// const user2session = (params) => wxRequest(params, apiMall + "/api/wechat/user2session?jsoncallback=?");
 const login =  (params) => wxRequest(params, apiMall + "/Xcx-Shjt2-loginAuthlogin");
 
 //商品接口---begin
@@ -27,9 +25,9 @@ const getHomeDisvocerList = (params) => wxRequest(params, apiMall + '/api/mall/d
 const getGoodsList = (params) => wxRequest(params, apiMall + '/api/mall/searchGoodsList');
 
 //查询商品详情信息
-const goodsDetail = (params) => wxRequest(params, apiMall + '/api/mall/goods');
+const goodsDetail = (params) => wxRequest(params, apiMall + '/Xcx-Shjt1-productIndex');
 //商品加入购物车
-const addCart = (params) => wxRequest(params, apiMall + '/api/mall/goodsCart/add');
+const addCart = (params) => wxRequest(params, apiMall + '/Xcx-Shjt1-shoppingAdd');
 //用户的购物车商品列表
 const cartList = (params) => wxRequest(params, apiMall + '/api/mall/goodsCart/list');
 //购物车的商品选中状态
@@ -50,10 +48,10 @@ const saveByCart = (params) => wxRequest(params, apiMall + '/api/mall/goodsOrder
 const toPay = (params) => wxRequest(params, apiMall + '/wepay/toPay');
 
 //商品收藏
-const goodsFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/add');
+const goodsFavorite = (params) => wxRequest(params, apiMall + '/Xcx-Shjt1-productCol');
 
 //商品收藏删除
-const goodsUnFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/delete');
+const goodsUnFavorite = (params) => wxRequest(params, apiMall + '/Xcx-Shjt1-productDelCol');
 
 //商品是否已收藏
 const goodsIsFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goodsFavorite/goodsIsFavorite');
@@ -61,6 +59,7 @@ const goodsIsFavorite = (params) => wxRequest(params, apiMall + '/api/mall/goods
 //商品接口---end
 
 //用户相关信息--begin
+const userInfo = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-userUserinfo');
 //用户的当天签到信息
 const userSginInfo = (params) => wxRequest(params, apiMall + '/api/userSign/signInfo');
 const doSign = (params) => wxRequest(params, apiMall + '/api/userSign/doSign');
@@ -162,7 +161,6 @@ export default {
   getGoodsList,
   goodsDetail,
   wxJsCode2Session,
-  user2session,
   userSginInfo,
   doSign,
   addCart,
@@ -206,5 +204,6 @@ export default {
   getPayOrderDetail,
   getAdList,
   getSignDate,
-  login
+  login,
+  userInfo
 }

@@ -57,7 +57,7 @@
         <text>——度假养身套餐——</text>
     </view>
     <view class="grids">
-      <view class="grid" wx:for="{{prolist}}" wx:key="name" data-id="{{item.id}}">
+      <view class="grid" wx:for="{{prolist}}" wx:key="name" data-id="{{item.id}}" @tap="goToGoodDetail({{item.id}})">
          <view class="grid-img">
            <image src=" {{item.photo_x}}" mode="scaleToFill" />
          </view>
@@ -143,7 +143,7 @@ export default class Home extends wepy.page {
     } else {
       tip.error(json.data.msg);
     }
-    that.showLoading = false; 
+    that.showLoading = false;
   }
   async getAdList() {
     const json = await api.getAdList({
@@ -205,6 +205,13 @@ export default class Home extends wepy.page {
     closeAlert() {
      // tip.alert('关闭');
    },
+   // 跳转到商品详情页
+   goToGoodDetail(goodId){
+     wepy.navigateTo({
+       url: "/pages/goods_detail?id="+goodId
+    })
+   },
+
    getPhoneNumber(res) {
      console.log(res.detail.errMsg)
        console.log(res.detail.iv)

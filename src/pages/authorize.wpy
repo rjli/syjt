@@ -31,9 +31,14 @@ export default class Authorize extends wepy.page {
   async onGotUserInfo(e) {
     if (e.detail.errMsg == 'getUserInfo:ok') {
       let res = await wepy.login();
+      console.log("用户登录")
+      console.log(res);
       if (res.code) {
         console.log(e.detail.userInfo);
         wepy.setStorageSync(USER_INFO, e.detail.userInfo);
+        let userinfo =   e.detail.userInfo;
+        userinfo.uid = '111';
+        wepy.setStorageSync(USER_INFO,userinfo);
         let systemInfo = wepy.getSystemInfoSync();
         wepy.setStorageSync(SYSTEM_INFO, systemInfo);
         let rlt = await api.wxJsCode2Session({
@@ -47,11 +52,11 @@ export default class Authorize extends wepy.page {
           if (data.openid) {
             console.log(wepy.getStorageSync(USER_SPECICAL_INFO));
             wepy.setStorageSync(USER_SPECICAL_INFO, data);
-             this.login(data.openid,e.detail.userInfo.nickName,e.detail.userInfo.avatarUrl,e.detail.userInfo.gender);
+             // this.login(data.openid,e.detail.userInfo.nickName,e.detail.userInfo.avatarUrl,e.detail.userInfo.gender);
 
-            // wepy.switchTab({
-            //   url: '/pages/home'
-            // })
+            wepy.switchTab({
+              url: '/pages/home'
+            })
           }
         } else {
           let res = await wepy.showModal({
@@ -72,8 +77,10 @@ export default class Authorize extends wepy.page {
         tel:""
       }
     });
+
+
     if (json.data) {
-       console.log(json.data);
+          console.log(json.data);
     } else {}
   }
 

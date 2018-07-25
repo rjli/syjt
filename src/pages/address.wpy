@@ -18,7 +18,8 @@ import AddressEdit from "../components/address_edit";
 import api from "../api/api";
 import tip from '@/utils/tip';
 import {
-  USER_SPECICAL_INFO
+  USER_INFO,
+  SYSTEM_ERROR
 } from '@/utils/constant';
 export default class Address extends wepy.page {
   config = {
@@ -27,7 +28,6 @@ export default class Address extends wepy.page {
   data = {
     addressList: [],
     receiverInfo:{},
-
     //显示当前组件 0 列表 1新增 2编辑
     currentPage: 0,
     type: "" //哪个页面跳转过来的
@@ -35,19 +35,19 @@ export default class Address extends wepy.page {
 
   async getUserAddress(phone,code) {
     let that = this;
-    let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-    let openId = userSpecialInfo.openid;
+    let userInfo = wepy.getStorageSync(USER_INFO) || {};
+    let uid = userInfo.uid;
     const json = await api.getUserAddress({
       query: {
-        openId: openId
+        user_id: uid
       }
     });
-
-    if (json.data.code == 0) {
-      this.addressList=json.data.list;
+     console.log(json.data);
+    if (json.data.status == 1) {
+      this.addressList=json.data.adds;
       this.$invoke("addressList","refreshList", this.addressList);
     } else {
-      tip.error(json.data.msg)
+      tip.error(SYSTEM_ERROR);
     }
     that.showLoading = false;
   }
@@ -78,7 +78,7 @@ export default class Address extends wepy.page {
 
   onLoad(option) {
     this.currentPage = 0;
-  //  this.getUserAddress();
+   this.getUserAddress();
     this.type = (option.type==undefined?"":option.type);
     this.$invoke("addressList","setOrgType", this.type);
   }

@@ -29,15 +29,15 @@ const goodsDetail = (params) => wxRequest(params, apiMall + '/Xcx-Shjt1-productI
 //商品加入购物车
 const addCart = (params) => wxRequest(params, apiMall + '/Xcx-Shjt1-shoppingAdd');
 //用户的购物车商品列表
-const cartList = (params) => wxRequest(params, apiMall + '/api/mall/goodsCart/list');
+const cartList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt1-shoppingIndex');
 //购物车的商品选中状态
-const cartCheck = (params) => wxRequest(params, apiMall + '/api/mall/goodsCart/check');
+const cartCheck = (params) => wxRequest(params, apiMall + '/Xcx-Shjt1-shoppingCheck_shop');
 //购物车的商品选中状态(全选)
 const cartCheckAll = (params) => wxRequest(params, apiMall + '/api/mall/goodsCart/checkAll');
 //购物车的商品删除
-const cartDel = (params) => wxRequest(params, apiMall + '/api/mall/goodsCart/delete');
+const cartDel = (params) => wxRequest(params, apiMall + '/Xcx-Shjt1-shoppingDelete');
 //购物车的商品数量更新
-const cartUpdateNum = (params) => wxRequest(params, apiMall + '/api/mall/goodsCart/updateNum');
+const cartUpdateNum = (params) => wxRequest(params, apiMall + '/Xcx-Shjt1-shoppingUp_cart');
 //直接购买商品
 const preOrder = (params) => wxRequest(params, apiMall + '/api/mall/goodsOrder/commitData');
 
@@ -84,10 +84,10 @@ const sendRandCode = (params) => wxRequest(params, apiMall + '/api/sms/send');
 const getUserInfo = (params) => wxRequest(params, apiMall + '/api/userCenter/getUserInfo');
 
 //用户收货地址
-const getUserAddress = (params) => wxRequest(params, apiMall + '/api/receiverInfo/list');
+const getUserAddress = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-addressIndex');
 
 //保存用户收货地址
-const saveAddress = (params) => wxRequest(params, apiMall + '/api/receiverInfo/saveOrUpdate');
+const saveAddress = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-addressAdd_adds');
 
 //用户收货地址根据id查询
 const receiverInfoById = (params) => wxRequest(params, apiMall + '/api/receiverInfo/receiverInfoById');

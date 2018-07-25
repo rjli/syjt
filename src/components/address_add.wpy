@@ -31,7 +31,7 @@
       <view class="list_item">
         <view class="title">收货人姓名:</view>
         <view class="input">
-          <input type="text" name="receiverName" value="" />
+          <input type="text" name="receiverName"  />
         </view>
       </view>
       <view class="list_item">
@@ -44,7 +44,7 @@
 
       </view>
       <view class="list_item">
-        <view class="title">所在地区:</view>
+        <view class="title">所在地区: </view>
         <view class="input">
           <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
               <view class="picker">
@@ -59,7 +59,7 @@
       <view class="list_item">
         <view class="title">邮政编码:</view>
         <view class="input">
-          <input type="text" name="addressDetail" value="{{postcode}}"/>
+          <input type="text" name="postcode" value="{{postcode}}"/>
         </view>
       </view>
       <view class="list_item">
@@ -86,7 +86,8 @@ import tip from '@/utils/tip';
 import api from "@/api/api";
 import postcodeUtil from "@/utils/postcode";
 import {
-  USER_SPECICAL_INFO
+  USER_INFO,
+  SYSTEM_ERROR
 } from '@/utils/constant';
 export default class AddressAdd extends wepy.component {
   data = {
@@ -99,30 +100,33 @@ export default class AddressAdd extends wepy.component {
   components = {
   }
 
-  async addAddress(address) {
+  async addAddress(formData) {
+    console.log(formData);
     let that = this;
-    let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
+    let userInfo = wepy.getStorageSync(USER_INFO);
     let isDefult = 0;
     if (this.isDefult) {
       isDefult = 1;
-    } 
-    let openId = userSpecialInfo.openid;
+    }
+    let uid = userInfo.uid;
     const json = await api.saveAddress({
       query: {
-        // openId: openId,
-        // address: address,
-        // isDef: isDefult,
-        // province:that.provinceCode,
-        // city:that.cityCode,
-        // area:that.areaCode
+        user_id: uid,
+        receiver:formData.receiverName,
+        tel:formData.mobile,
+        sheng:that.region[0],
+        city:that.region[1],
+        quyu:that.region[2],
+        adds:formData.addressDetail,
+        code:formData.postcode
       }
     });
-    if (json.data.code == 0) {
+    if (json.data.status == 1) {
       //0 列表 1新增 2编辑 (显示列表)
       this.$emit('currentPage', 0);
       this.$emit('refreshAddList', 'hehe');
     } else {
-      tip.error(json.data.msg)
+      tip.error(SYSTEM_ERROR)
     }
     that.showLoading = false;
   }
@@ -138,7 +142,7 @@ export default class AddressAdd extends wepy.component {
       let receiverName = e.detail.value.receiverName;
       let mobile = e.detail.value.mobile;
       let addressDetail = e.detail.value.addressDetail;
-
+       let postcode =e.detail.value.postcode;
       if (receiverName == "") {
         tip.alert("输入收件人姓名");
         return false;
@@ -150,6 +154,9 @@ export default class AddressAdd extends wepy.component {
       }
       if (addressDetail == "") {
         tip.alert("输入详细地址");
+        return false;
+      }if (postcode == "") {
+        tip.alert("输入邮编");
         return false;
       }
       this.addAddress(e.detail.value);

@@ -1,5 +1,5 @@
 <template>
-  <view class="address">
+  <view class="address" wx:if="{{addressList}}">
     <repeat for="{{addressList}}" key="index" index="index" item="item">
       <view class="list_box">
         <swipeDelete :swipeData="item" @delItem.user="handleDelItem">

@@ -1,81 +1,81 @@
 <template>
-  <view style="height:{{winHeight}}rpx;overflow:hidden">
-    <import src="../plugins/wxParse/wxParse.wxml" />
-    <!--index.wxml-->
-    <swiper indicator-dots="true" autoplay="true" interval="5000" duration="500" indicator-active-color="#ffc452" indicator-color="#efefef" class="swiper">
-      <block wx:for="{{detail.img_arr}}" key="item" item="item" wx:key="key">
-        <swiper-item>
-          <image src="{{item}}" data-src="{{item}}" class="slide-image" @tap="previewImage" />
-        </swiper-item>
-      </block>
-    </swiper>
-    <view class="details-msg">
-      <view class="details-title">{{detail.name}}</view>
-      <view class="details_pinfo">
-        <text class="price">原价￥{{detail.price}}</text>
-        <text class="price">优惠价￥{{detail.price_yh}}</text>
-        <!-- <view class="order_time {{purchasetype==2||special==1?'hidden':''}}">
+<view style="height:{{winHeight}}rpx;overflow:hidden">
+  <import src="../plugins/wxParse/wxParse.wxml" />
+  <!--index.wxml-->
+  <swiper indicator-dots="true" autoplay="true" interval="5000" duration="500" indicator-active-color="#ffc452" indicator-color="#efefef" class="swiper">
+    <block wx:for="{{detail.img_arr}}" key="item" item="item" wx:key="key">
+      <swiper-item>
+        <image src="{{item}}" data-src="{{item}}" class="slide-image" @tap="previewImage" />
+      </swiper-item>
+    </block>
+  </swiper>
+  <view class="details-msg">
+    <view class="details-title">{{detail.name}}</view>
+    <view class="details_pinfo">
+      <text class="price">原价￥{{detail.price}}</text>
+      <text class="price">优惠价￥{{detail.price_yh}}</text>
+      <!-- <view class="order_time {{purchasetype==2||special==1?'hidden':''}}">
           <timer :startTime.sync="startTime" :endTime.sync="endTime"></timer>
         </view> -->
-<!--         <view class="share-box">
+      <!--         <view class="share-box">
           <i class="iconfont icon-share"></i>
           <text>分享</text>
         </view> -->
-      </view>
-      <view class="baoyou">{{detail.intro}}</view>
     </view>
-    <view class="order_num">
-      <view class="doc" >库存:
-        <text class="num">{{detail.num}}件</text>
-      </view>
-      <view class="doc" >人气:
-        <text class="num">{{detail.renqi}}</text>
-      </view>
+    <view class="baoyou">{{detail.intro}}</view>
+  </view>
+  <view class="order_num">
+    <view class="doc">库存:
+      <text class="num">{{detail.num}}件</text>
     </view>
-    <view class="block">
+    <view class="doc">人气:
+      <text class="num">{{detail.renqi}}</text>
+    </view>
+  </view>
+  <view class="block">
 
-      <view class="block_title">商品评价(20)</view>
-      <!-- <view class="block_content">
+    <view class="block_title">商品评价(20)</view>
+    <!-- <view class="block_content">
         <commentList :list.sync="commentList"></commentList>
         <view class="button-more-cmment" wx:if="{{commentList.length!==0}}" @tap="moreComment">查看更多评论</view>
       </view> -->
-    </view>
-    <view class="spacing"></view>
+  </view>
+  <view class="spacing"></view>
 
-    <view class="spacing"></view>
-    <view class="block">
-      <view class="block_title">商品信息</view>
-      <view class="block_content">
-        <view class="table">
-          <!-- <view class="th"> -->
-            <view class="tr1" >目的地:{{detail.dest}}</view>
-            <view class="tr1" >行程天数:{{detail.lytime}}</view>
-            <view class="tr1" >出发日期:{{detail.woshtime}}</view>
-            <view class="tr1" >联系电话:{{detail.tel}}</view>
-          <!-- </view>  -->
-        </view>
+  <view class="spacing"></view>
+  <view class="block">
+    <view class="block_title">商品信息</view>
+    <view class="block_content">
+      <view class="table">
+        <!-- <view class="th"> -->
+        <view class="tr1">目的地:{{detail.dest}}</view>
+        <view class="tr1">行程天数:{{detail.lytime}}</view>
+        <view class="tr1">出发日期:{{detail.woshtime}}</view>
+        <view class="tr1">联系电话:{{detail.tel}}</view>
+        <!-- </view>  -->
       </view>
     </view>
-    <view class="spacing"></view>
-    <view class="block">
-      <view class="block_title">旅游详情</view>
-    </view>
-    <view class="big_images">
-      <view class="doc">
-        <view class="wxParse-p">
-          <template is="wxParse" data="{{wxParseData:detailInfo.nodes}}">
+  </view>
+  <view class="spacing"></view>
+  <view class="block">
+    <view class="block_title">旅游详情</view>
+  </view>
+  <view class="big_images">
+    <view class="doc">
+      <view class="wxParse-p">
+        <template is="wxParse" data="{{wxParseData:detailInfo.nodes}}">
           </template>
-        </view>
       </view>
     </view>
-    <view class="detail-bottom">
-      <view class="bottom-box">
-        <view class="item" @tap="homePage">
-          <i class="iconfont icon-home"></i>
-          <view class="doc">首页</view>
-        </view>
-        <!-- <contact-button class="contact"> -->
-        <!-- <contact-button class="contact">
+  </view>
+  <view class="detail-bottom">
+    <view class="bottom-box">
+      <view class="item" @tap="homePage">
+        <i class="iconfont icon-home"></i>
+        <view class="doc">首页</view>
+      </view>
+      <!-- <contact-button class="contact"> -->
+      <!-- <contact-button class="contact">
         </contact-button>
         <view class="item">
           <i class="iconfont icon-message"></i>
@@ -83,48 +83,48 @@
         </view>
         <contact-button class="contact">
         </contact-button> -->
-        <view class="item {{isFavorite?'selec_active':''}}" @tap="takeFavorite">
-          <i class="iconfont icon-collection"></i>
-          <view class="doc">收藏</view>
-        </view>
-        <view class="sy-bottom {{canOrder?'btn_cart':'cart_color'}}" @tap="takeCart">加入购物车</view>
-        <view class="sy-bottom {{canOrder?'btn_order':'order_color'}}" @tap="takeOrder">立即购买</view>
+      <view class="item {{isFavorite?'selec_active':''}}" @tap="takeFavorite">
+        <i class="iconfont icon-collection"></i>
+        <view class="doc">收藏</view>
       </view>
-    </view>
-    <view class="over_model {{hidden?'hidden':''}}"></view>
-    <view class="panle_model {{hidden?'hidden':''}}" animation="{{animationData}}">
-      <view class="model_content">
-        <view class="head_box">
-          <view class="img_wrap">
-            <image class="goods_img" src="{{detail.photo_x}}" />
-          </view>
-          <view class="product_wrap">
-            <view class="product_name">{{detail.name}}</view>
-            <view class="price">￥ {{detail.price}}</view>
-          </view>
-        </view>
-        <scroll-view scroll-y="true" style="height:400rpx">
-          <view class="rule_box" wx:for="{{detail.goodsSkuNameList}}" item="item" wx:key="key" wx:for-index="ex">
-            <view class="title">{{item.skuName}}</view>
-            <view class="items">
-              <view class="item {{item.current?'active':''}}" wx:for="{{item.skuValList}}" item="item" wx:key="key" @tap.stop="selAttr" data-id="{{item.skuValId}}" data-nameid="{{item.skuNameId}}" data-index="{{ex}}">{{item.skuVal}}</view>
-            </view>
-          </view>
-          <view class="num_box">
-            <view class="title">数量</view>
-            <view class="stock">库存:{{detail.stockNum}}件</view>
-            <view class="buy-num">
-              <view class="jian-btn {{item.number==1? 'disabled' : ''}}" catchtap="jianBtnTap" data-index="{{index}}">-</view>
-              <input type="number" bindinput="bindOrderNumInput" value="{{orderNum}}" />
-              <view class="jia-btn {{item.number==10? 'disabled' : ''}}" catchtap="jiaBtnTap" data-index="{{index}}">+</view>
-            </view>
-          </view>
-        </scroll-view>
-        <view class="colse_model" @tap="closeModel"><i class="iconfont icon-close"></i></view>
-      </view>
-      <view class="comfire_btn" @tap.stop="confirmTake">确定</view>
+      <view class="sy-bottom {{canOrder?'btn_cart':'cart_color'}}" @tap="takeCart">加入购物车</view>
+      <view class="sy-bottom {{canOrder?'btn_order':'order_color'}}" @tap="takeOrder">立即购买</view>
     </view>
   </view>
+  <view class="over_model {{hidden?'hidden':''}}"></view>
+  <view class="panle_model {{hidden?'hidden':''}}" animation="{{animationData}}">
+    <view class="model_content">
+      <view class="head_box">
+        <view class="img_wrap">
+          <image class="goods_img" src="{{detail.photo_x}}" />
+        </view>
+        <view class="product_wrap">
+          <view class="product_name">{{detail.name}}</view>
+          <view class="price">￥ {{detail.price}}</view>
+        </view>
+      </view>
+      <scroll-view scroll-y="true" style="height:400rpx">
+        <view class="rule_box" wx:for="{{detail.goodsSkuNameList}}" item="item" wx:key="key" wx:for-index="ex">
+          <view class="title">{{item.skuName}}</view>
+          <view class="items">
+            <view class="item {{item.current?'active':''}}" wx:for="{{item.skuValList}}" item="item" wx:key="key" @tap.stop="selAttr" data-id="{{item.skuValId}}" data-nameid="{{item.skuNameId}}" data-index="{{ex}}">{{item.skuVal}}</view>
+          </view>
+        </view>
+        <view class="num_box">
+          <view class="title">数量</view>
+          <view class="stock">库存:{{detail.stockNum}}件</view>
+          <view class="buy-num">
+            <view class="jian-btn {{item.number==1? 'disabled' : ''}}" catchtap="jianBtnTap" data-index="{{index}}">-</view>
+            <input type="number" bindinput="bindOrderNumInput" value="{{orderNum}}" />
+            <view class="jia-btn {{item.number==10? 'disabled' : ''}}" catchtap="jiaBtnTap" data-index="{{index}}">+</view>
+          </view>
+        </view>
+      </scroll-view>
+      <view class="colse_model" @tap="closeModel"><i class="iconfont icon-close"></i></view>
+    </view>
+    <view class="comfire_btn" @tap.stop="confirmTake">确定</view>
+  </view>
+</view>
 </template>
 <script>
 import wepy from 'wepy'
@@ -159,10 +159,10 @@ export default class goodsDetail extends wepy.page {
     isValidDate: true,
     canOrder: true, //是否能下单
     special: 0, ////0-正常入库;1-特价专区和换货专区,
-    ccId:"" //收藏了产品之后返回的收藏id
+    ccId: "" //收藏了产品之后返回的收藏id
   }
   components = {
-    timer:timer
+    timer: timer
   }
   onLoad(option) {
     let that = this;
@@ -217,10 +217,10 @@ export default class goodsDetail extends wepy.page {
     const json = await api.goodsDetail({
       query: {
         pro_id: that.goodsId,
-        method:"POST"
+        method: "POST"
       }
     });
-     console.log(json.data);
+    console.log(json.data);
     if (json.data.status == 1) {
       that.detail = json.data.pro;
       WxParse.wxParse('detailInfo', 'html', that.detail.content, this);
@@ -351,7 +351,7 @@ export default class goodsDetail extends wepy.page {
       query: {
         uid: uid,
         pid: that.detail.id,
-        method:"POST"
+        method: "POST"
       }
     });
     console.log(json.data);
@@ -371,8 +371,8 @@ export default class goodsDetail extends wepy.page {
     let that = this;
     const json = await api.goodsUnFavorite({
       query: {
-          ccId: that.ccId,
-          method:"POST"
+        ccId: that.ccId,
+        method: "POST"
       }
     });
     if (json.data == "ok") {
@@ -510,392 +510,389 @@ export default class goodsDetail extends wepy.page {
     }
   }
 }
-
 </script>
 <style lang="less">
 .swiper {
-  height: 662rpx;
+    height: 662rpx;
 }
 
 .slide-image {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .big_images {
-  height: 100%;
-  display: block;
-  margin-bottom: 90rpx;
-  background-color: white;
-  padding:20rpx;
+    height: 100%;
+    display: block;
+    margin-bottom: 90rpx;
+    background-color: white;
+    padding: 20rpx;
 
-  image {
-    width: 100%;
-  }
+    image {
+        width: 100%;
+    }
 
 }
 
 .details-msg {
-  border-top: 1px solid #ededed;
-  padding: 30rpx 30rpx;
-  background: #fff;
-  .details-title {
-    overflow: hidden;
-    width: 100%;
-    box-sizing: border-box;
-    position: relative;
-    font-size: 30rpx;
-    color: #333;
-  }
-  .details-introduction {
-    color: #999;
-    font-size: 28rpx;
-    line-height: 40rpx;
-    margin-top: 20rpx;
-  }
-  .details_pinfo {
-    padding: 20rpx 0;
-    position: relative;
-    display: flex;
-    align-items: center;
-    .price {
-      // color: #f73c3c;
-      font-size: 30rpx;
-      font-weight: bold;
-      padding-right:20rpx;
+    border-top: 1px solid #ededed;
+    padding: 30rpx;
+    background: #fff;
+    .details-title {
+        overflow: hidden;
+        width: 100%;
+        box-sizing: border-box;
+        position: relative;
+        font-size: 30rpx;
+        color: #333;
     }
-    .other-price {
-      font-size: 28rpx;
-      padding-left: 40rpx
+    .details-introduction {
+        color: #999;
+        font-size: 28rpx;
+        line-height: 40rpx;
+        margin-top: 20rpx;
     }
-    .share-box {
-      text-align: center;
-      font-size: 20rpx;
-      padding-left: 50rpx;
-      flex: 1;
+    .details_pinfo {
+        padding: 20rpx 0;
+        position: relative;
+        display: flex;
+        align-items: center;
+        .price {
+            // color: #f73c3c;
+            font-size: 30rpx;
+            font-weight: bold;
+            padding-right: 20rpx;
+        }
+        .other-price {
+            font-size: 28rpx;
+            padding-left: 40rpx;
+        }
+        .share-box {
+            text-align: center;
+            font-size: 20rpx;
+            padding-left: 50rpx;
+            flex: 1;
+        }
+        .icon-share {
+            display: block;
+            padding-bottom: 5rpx;
+            font-size: 40rpx;
+        }
+        .baoyou {
+            color: #808080;
+            font-size: 28rpx;
+            margin-top: 20rpx;
+        }
+        .order_time {
+            position: absolute;
+            right: 170rpx;
+            top: 0;
+        }
     }
-    .icon-share {
-      display: block;
-      padding-bottom: 5rpx;
-      font-size: 40rpx;
-    }
-    .baoyou {
-      color: #808080;
-      font-size: 28rpx;
-      margin-top: 20rpx;
-    }
-    .order_time {
-      position: absolute;
-      right: 170rpx;
-      top: 0rpx;
-    }
-  }
 }
 
 .order_num {
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 108rpx;
-  border-top: 1px solid #efefef;
-  border-bottom: 1px solid #efefef;
-  padding: 0 30rpx;
-  .doc {
-    color: #808080;
-    .num {
-      color: #f73c3c;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 108rpx;
+    border-top: 1px solid #efefef;
+    border-bottom: 1px solid #efefef;
+    padding: 0 30rpx;
+    .doc {
+        color: #808080;
+        .num {
+            color: #f73c3c;
+        }
     }
-  }
 }
 
 .block {
-  padding: 27rpx 0rpx;
-  background: #fff;
-  .block_title {
-    color: #000;
-    height: 30rpx;
-    line-height: 30rpx;
-    border-left: 6px solid #f73c3c;
-    padding-left: 20rpx;
-  }
-  .block_content {
-    padding: 38rpx 22rpx;
-    .process {
-      font-size: 20rpx;
-      margin: 0 auto;
-      border: 1px solid #999999;
-      padding: 10rpx;
-      border-radius: 200px;
-      text-align: center;
-      margin-bottom: 25rpx;
-      color: #808080;
+    padding: 27rpx 0;
+    background: #fff;
+    .block_title {
+        color: #000;
+        height: 30rpx;
+        line-height: 30rpx;
+        border-left: 6px solid #f73c3c;
+        padding-left: 20rpx;
     }
-    .doc {
-      color: #808080;
-      font-size: 26rpx;
-      line-height: 30rpx;
+    .block_content {
+        padding: 38rpx 22rpx;
+        .process {
+            font-size: 20rpx;
+            margin: 0 auto;
+            border: 1px solid #999999;
+            padding: 10rpx;
+            border-radius: 200px;
+            text-align: center;
+            margin-bottom: 25rpx;
+            color: #808080;
+        }
+        .doc {
+            color: #808080;
+            font-size: 26rpx;
+            line-height: 30rpx;
+        }
     }
-  }
-  .table {
-    margin: 0 auto;
-    margin-top: -24rpx;
-    .th {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 24rpx;
+    .table {
+        margin: -24rpx auto 0;
+        .th {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 24rpx;
+        }
+        .tr {
+            font-size: 26rpx;
+            color: #808080;
+            text-align: left;
+            flex: 1;
+        }
     }
-    .tr {
-      font-size: 26rpx;
-      color: #808080;
-      text-align: left;
-      flex: 1;
-    }
-  }
 }
 
 .detail-bottom {
-  width: 100%;
-  border-top: 1px solid #ededed;
-  position: fixed;
-  bottom: 0;
-  background: #fff;
-  z-index: 1001;
-  .bottom-box {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    position: relative;
-    .contact {
-      width: 100rpx;
-      height: 80rpx;
-      margin: 0 auto;
-      position: absolute;
-      text-align: center;
-      line-height: 80rpx;
-      left: 100rpx; // 在客服上面
-      opacity: 0;
+    width: 100%;
+    border-top: 1px solid #ededed;
+    position: fixed;
+    bottom: 0;
+    background: #fff;
+    z-index: 1001;
+    .bottom-box {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        position: relative;
+        .contact {
+            width: 100rpx;
+            height: 80rpx;
+            margin: 0 auto;
+            position: absolute;
+            text-align: center;
+            line-height: 80rpx;
+            left: 100rpx; // 在客服上面
+            opacity: 0;
+        }
     }
-  }
-  .sy-bottom {
-    padding: 15rpx 40rpx;
-    height: 60rpx;
-    line-height: 60rpx;
-    font-size: 30rpx;
-  }
-  .btn_order {
-    background: #ff4856;
-    color: #fff;
-  }
-  .btn_cart {
-    color: #fff;
-    background: #ff6e30;
-  }
-  .order_color {
-    background: #A9A9A9;
-    color: #fff;
-  }
-  .cart_color {
-    color: #fff;
-    background: #A9A9A9;
-  }
-  .item:first-child {
-    border-right: 1px solid #efefef;
-  }
-  .item {
-    flex: 1;
-    text-align: center;
-    .doc {
-      font-size: 24rpx;
+    .sy-bottom {
+        padding: 15rpx 40rpx;
+        height: 60rpx;
+        line-height: 60rpx;
+        font-size: 30rpx;
     }
-  }
-  .selec_active {
-    .doc {
-      color: #ff4856;
+    .btn_order {
+        background: #ff4856;
+        color: #fff;
     }
-    .iconfont {
-      color: #ff4856;
+    .btn_cart {
+        color: #fff;
+        background: #ff6e30;
     }
-  }
+    .order_color {
+        background: #A9A9A9;
+        color: #fff;
+    }
+    .cart_color {
+        color: #fff;
+        background: #A9A9A9;
+    }
+    .item:first-child {
+        border-right: 1px solid #efefef;
+    }
+    .item {
+        flex: 1;
+        text-align: center;
+        .doc {
+            font-size: 24rpx;
+        }
+    }
+    .selec_active {
+        .doc {
+            color: #ff4856;
+        }
+        .iconfont {
+            color: #ff4856;
+        }
+    }
 }
 
 .over_model {
-  position: fixed;
-  overflow: hidden;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-  width: 100%;
-  height: 100%;
-  top: 0;
+    position: fixed;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    top: 0;
 }
 
 .head_box {
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #efefef;
-  padding-bottom: 26rpx;
-  .img_wrap {
-    height: 200rpx;
-    width: 200rpx;
-    background: #000;
-  }
-  .goods_img {
-    height: 200rpx;
-    width: 200rpx;
-    background: #000;
-  }
-  .product_wrap {
-    padding: 20rpx;
-  }
-  .product_name {
-    color: #666;
-  }
-  .price {
-    color: #e11500;
-    font-size: 36rpx;
-    padding-top: 32rpx;
-  }
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #efefef;
+    padding-bottom: 26rpx;
+    .img_wrap {
+        height: 200rpx;
+        width: 200rpx;
+        background: #000;
+    }
+    .goods_img {
+        height: 200rpx;
+        width: 200rpx;
+        background: #000;
+    }
+    .product_wrap {
+        padding: 20rpx;
+    }
+    .product_name {
+        color: #666;
+    }
+    .price {
+        color: #e11500;
+        font-size: 36rpx;
+        padding-top: 32rpx;
+    }
 }
 
 .rule_box {
-  border-bottom: 1px solid #efefef;
-  padding-bottom: 26rpx;
-  .title {
-    color: #4c4c4c;
-    font-size: 32rpx;
-    margin-top: 10rpx;
-  }
-  .items {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 5rpx;
-    margin-left: -20rpx;
-  }
-  .item {
-    padding: 15rpx 28rpx;
-    background: #e6e6e6;
-    color: #000;
-    margin-left: 20rpx;
-    margin-top: 10rpx;
-    border-radius: 10rpx;
-  }
-  .active {
-    background: #ed394a;
-    color: #fff;
-  }
+    border-bottom: 1px solid #efefef;
+    padding-bottom: 26rpx;
+    .title {
+        color: #4c4c4c;
+        font-size: 32rpx;
+        margin-top: 10rpx;
+    }
+    .items {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 5rpx;
+        margin-left: -20rpx;
+    }
+    .item {
+        padding: 15rpx 28rpx;
+        background: #e6e6e6;
+        color: #000;
+        margin-left: 20rpx;
+        margin-top: 10rpx;
+        border-radius: 10rpx;
+    }
+    .active {
+        background: #ed394a;
+        color: #fff;
+    }
 }
 
 .num_box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15rpx 0rpx;
-  .title {
-    color: #4c4c4c;
-    font-size: 32rpx;
-  }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15rpx 0;
+    .title {
+        color: #4c4c4c;
+        font-size: 32rpx;
+    }
 }
 
 .buy-num {
-  width: 170rpx;
-  height: 48rpx;
-  line-height: 48rpx;
-  display: flex;
-  font-size: 24rpx;
-  text-align: center;
-  .jian-btn {
-    width: 48rpx;
-    height: 100%;
-    border-left: 1rpx solid #ccc;
-    border-bottom: 1rpx solid #ccc;
-    border-top: 1rpx solid #ccc;
-    border-bottom-left-radius: 6rpx;
-    border-top-left-radius: 6rpx;
-  }
-  .jian-btn.disabled {
-    background-color: #f5f5f9;
-    border-left: 1rpx solid #eee;
-    border-bottom: 1rpx solid #eee;
-    border-top: 1rpx solid #eee;
-    color: #ccc;
-  }
-  .jia-btn {
-    width: 48rpx;
-    height: 100%;
-    border-right: 1rpx solid #ccc;
-    border-bottom: 1rpx solid #ccc;
-    border-top: 1rpx solid #ccc;
-    border-bottom-right-radius: 6rpx;
-    border-top-right-radius: 6rpx;
-  }
-  .jia-btn.disabled {
-    background-color: #f5f5f9;
-    border-right: 1rpx solid #eee;
-    border-bottom: 1rpx solid #eee;
-    border-top: 1rpx solid #eee;
-    color: #ccc;
-  }
-  input {
-    width: 68rpx;
+    width: 170rpx;
     height: 48rpx;
-    min-height: 48rpx;
-    text-align: center;
+    line-height: 48rpx;
+    display: flex;
     font-size: 24rpx;
-    border: 1rpx solid #ccc;
-  }
+    text-align: center;
+    .jian-btn {
+        width: 48rpx;
+        height: 100%;
+        border-left: 1rpx solid #ccc;
+        border-bottom: 1rpx solid #ccc;
+        border-top: 1rpx solid #ccc;
+        border-bottom-left-radius: 6rpx;
+        border-top-left-radius: 6rpx;
+    }
+    .jian-btn.disabled {
+        background-color: #f5f5f9;
+        border-left: 1rpx solid #eee;
+        border-bottom: 1rpx solid #eee;
+        border-top: 1rpx solid #eee;
+        color: #ccc;
+    }
+    .jia-btn {
+        width: 48rpx;
+        height: 100%;
+        border-right: 1rpx solid #ccc;
+        border-bottom: 1rpx solid #ccc;
+        border-top: 1rpx solid #ccc;
+        border-bottom-right-radius: 6rpx;
+        border-top-right-radius: 6rpx;
+    }
+    .jia-btn.disabled {
+        background-color: #f5f5f9;
+        border-right: 1rpx solid #eee;
+        border-bottom: 1rpx solid #eee;
+        border-top: 1rpx solid #eee;
+        color: #ccc;
+    }
+    input {
+        width: 68rpx;
+        height: 48rpx;
+        min-height: 48rpx;
+        text-align: center;
+        font-size: 24rpx;
+        border: 1rpx solid #ccc;
+    }
 }
 
 .panle_model {
-  position: absolute;
-  height: 0rpx;
-  width: 100%;
-  z-index: 1002;
-  background: #fff;
-  bottom: 0;
+    position: absolute;
+    height: 0;
+    width: 100%;
+    z-index: 1002;
+    background: #fff;
+    bottom: 0;
 }
 
 .model_content {
-  padding: 20rpx;
-  position: relative;
+    padding: 20rpx;
+    position: relative;
 }
 
 .colse_model {
-  position: absolute;
-  right: 10rpx;
-  top: 10rpx;
-  .icon-close {
-    color: #e11500;
-    font-size: 32rpx;
-  }
+    position: absolute;
+    right: 10rpx;
+    top: 10rpx;
+    .icon-close {
+        color: #e11500;
+        font-size: 32rpx;
+    }
 }
 
 .comfire_btn {
-  height: 100rpx;
-  line-height: 100rpx;
-  width: 100%;
-  background: #ff6e30;
-  text-align: center;
-  color: #fff;
-  position: absolute;
-  bottom: 0;
-  z-index: 10003;
+    height: 100rpx;
+    line-height: 100rpx;
+    width: 100%;
+    background: #ff6e30;
+    text-align: center;
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    z-index: 10003;
 }
 
 .button-more-cmment {
-  font-size: 28rpx;
-  height: 55rpx;
-  line-height: 55rpx;
-  text-align: center;
-  margin: 20rpx auto;
-  width: 200rpx;
-  -moz-border-radius: 10rpx;
-  /* Firefox */
-  -webkit-border-radius: 10rpx;
-  /* Safari 和 Chrome */
-  border-radius: 10rpx;
-  /* Opera 10.5+, 以及使用了IE-CSS3的IE浏览器 */
-  color: #ff4856;
-  border: 1px solid #ff4856;
+    font-size: 28rpx;
+    height: 55rpx;
+    line-height: 55rpx;
+    text-align: center;
+    margin: 20rpx auto;
+    width: 200rpx;
+    -moz-border-radius: 10rpx;
+    /* Firefox */
+    -webkit-border-radius: 10rpx;
+    /* Safari 和 Chrome */
+    border-radius: 10rpx;
+    /* Opera 10.5+, 以及使用了IE-CSS3的IE浏览器 */
+    color: #ff4856;
+    border: 1px solid #ff4856;
 }
-
 </style>

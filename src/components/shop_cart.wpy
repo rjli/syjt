@@ -7,17 +7,17 @@
           <view class="goods-info">
             <icon class="icon_check" type="success" color="{{item.ischecked?'red':'rgb(153,153,153)'}}" @tap.stop="selectTap" data-index="{{index}}" data-id="{{item.id}}" size="20" />
             <view class="img-box">
-              <image src="{{item.thumLogo}}" class="img" />
+              <image src="{{item.photo_x}}" class="img" />
             </view>
             <view class="text-box">
               <view class="goods-title">
-                <navigator url="/pages/goods_detail?id={{item.goodsId}}">
-                  {{item.goodsName}}
+                <navigator url="/pages/goods_detail?id={{item.pid}}">
+                  {{item.pro_name}}
                 </navigator>
               </view>
               <!--  -->
               <view class="lable">
-                <view class="goods-lable">{{item.goodsSkuValName}}</view>
+                <view class="goods-lable">{{item.num}}</view>
                 <view class="bo-label" wx:if="{{item.type==2}}">补货</view>
               </view>
               <view class="goods-price">¥ {{item.price}}</view>
@@ -28,7 +28,6 @@
               </view>
             </view>
           </view>
-          <!--   </view> -->
         </swipeDelete>
       </view>
     </repeat>
@@ -59,7 +58,8 @@
   import api from '@/api/api';
   import tip from '@/utils/tip';
   import {
-    USER_SPECICAL_INFO
+    USER_INFO,
+    SYSTEM_ERROR
   } from '@/utils/constant';
   import swipeDelete from './common/wepy-swipe-delete'
   export default class shopCart extends wepy.component {
@@ -72,30 +72,30 @@
       saveHidden: true,
       totalPrice: 0,
       operating: false,
-      allChecked: true
+      allChecked: false
     }
     //获取购物车商品列表
     async getCartList() {
       let that = this;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
+      let userInfo = wepy.getStorageSync(USER_INFO) || {};
+      let uid = userInfo.uid;
       const json = await api.cartList({
         query: {
-          openId: openId
+          user_id: uid
         }
       });
-      if (json.data.code == 0) {
-        let data = json.data;
-        this.list = data.list;
-        this.totalPrice = data.totalPrice;
-        for (var i = 0; i < this.list.length; i++) {
-          if (!this.list[i].ischecked) {
-            this.allChecked = false;
-            break;
-          }
-        }
+      console.log(json.data);
+      if (json.data.status == 1) {
+        this.list = json.data.cart;
+        // this.totalPrice = data.totalPrice;
+        // for (var i = 0; i < this.list.length; i++) {
+        //   if (!this.list[i].ischecked) {
+        //     this.allChecked = false;
+        //     break;
+        //   }
+        // }
       } else {
-        tip.error(json.data.msg)
+        tip.error(SYSTEM_ERROR)
       }
       that.$apply();
     }
@@ -108,15 +108,13 @@
     }
     computed = {}
     async checkGoods(id, index, ischecked) {
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
       const json = await api.cartCheck({
         query: {
-          openId: openId,
-          id: id
+          cart_id: id
         }
       });
-      if (json.data.code == 0) {
+      console.log(json.data);
+      if (json.data.status == 1) {
         // 购物车数据
         this.list[index].ischecked = !ischecked;
         if (this.list[index].ischecked) {
@@ -125,61 +123,71 @@
           this.totalPrice -= parseInt(this.list[index].priceSubtotal);
         }
       } else {
-        tip.error(json.data.msg)
+        tip.error(SYSTEM_ERROR)
       }
       this.$apply();
     }
     async reduceGoodNum(id, num, index) {
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
+      let userInfo = wepy.getStorageSync(USER_INFO) || {};
+      let uid = userInfo.uid;
       const json = await api.cartUpdateNum({
         query: {
-          openId: openId,
-          id: id,
+          user_id: uid,
+          cart_id: id,
           num: num
         }
       });
-      if (json.data.code == 0) {
-        // 购物车数据
-        this.list[index].num = num;
-        this.totalPrice = this.totalPrice - this.list[index].price;
-        this.operating = false;
+      if (json.data.status == 1  ) {
+        if(  json.data.succ.indexOf("操作成功")> -1){
+          console.log(1);
+          // 购物车数据
+          this.list[index].num = num;
+          // this.totalPrice = parseInt(this.totalPrice) + parseInt(this.list[index].price);
+          this.operating = false;
+        }else{
+            tip.error("操作失败");
+        }
+
       } else {
-        tip.error(json.data.msg)
+        tip.error(SYSTEM_ERROR)
       }
       this.$apply();
     }
     async addGoodNum(id, num, index) {
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
+      let userInfo = wepy.getStorageSync(USER_INFO) || {};
+      let uid = userInfo.uid;
       const json = await api.cartUpdateNum({
         query: {
-          openId: openId,
-          id: id,
+          user_id: uid,
+          cart_id: id,
           num: num
         }
       });
-      if (json.data.code == 0) {
-        // 购物车数据
-        this.list[index].num = num;
-        this.totalPrice = parseInt(this.totalPrice) + parseInt(this.list[index].price);
-        this.operating = false;
+      if (json.data.status == 1  ) {
+        if(  json.data.succ.indexOf("操作成功")> -1){
+          console.log(1);
+          // 购物车数据
+          this.list[index].num = num;
+          // this.totalPrice = parseInt(this.totalPrice) + parseInt(this.list[index].price);
+          this.operating = false;
+        }else{
+            tip.error("操作失败");
+        }
+
       } else {
-        tip.error(json.data.msg)
+        tip.error(SYSTEM_ERROR)
       }
       this.$apply();
     }
     async deleteGoods(itemData) {
       var id = itemData.id;
-      let userSpecialInfo = wepy.getStorageSync(USER_SPECICAL_INFO) || {};
-      let openId = userSpecialInfo.openid;
       const json = await api.cartDel({
         query: {
-          openId: openId,
-          cartIdList: [id],
+          cart_id: id,
         }
       });
-      if (json.data.code == 0) {
+      console.log(json.data);
+      if (json.data.status == 1) {
         // 购物车数据
         let retList = [];
         for (var i = 0; i < this.list.length; i++) {
@@ -194,7 +202,7 @@
         }
         this.list = retList;
       } else {
-        tip.error(json.data.msg)
+        tip.error(SYSTEM_ERROR)
       }
       this.$apply();
     }

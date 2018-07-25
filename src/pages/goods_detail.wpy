@@ -88,7 +88,7 @@
           <view class="doc">收藏</view>
         </view>
         <view class="sy-bottom {{canOrder?'btn_cart':'cart_color'}}" @tap="takeCart">加入购物车</view>
-        <view class="sy-bottom {{canOrder?'btn_order':'order_color'}}" @tap="takeOrder">立即购买}</view>
+        <view class="sy-bottom {{canOrder?'btn_order':'order_color'}}" @tap="takeOrder">立即购买</view>
       </view>
     </view>
     <view class="over_model {{hidden?'hidden':''}}"></view>
@@ -159,6 +159,7 @@ export default class goodsDetail extends wepy.page {
     isValidDate: true,
     canOrder: true, //是否能下单
     special: 0, ////0-正常入库;1-特价专区和换货专区,
+    ccId:"" //收藏了产品之后返回的收藏id
   }
   components = {
     timer:timer
@@ -355,6 +356,7 @@ export default class goodsDetail extends wepy.page {
     });
     console.log(json.data);
     if (json.data.status == 1) {
+      this.ccId = json.data.ccId;
       console.log("===========商品收藏成功=========")
       this.isFavorite = true;
       tip.toast("收藏成功");
@@ -369,11 +371,11 @@ export default class goodsDetail extends wepy.page {
     let that = this;
     const json = await api.goodsUnFavorite({
       query: {
-        ccid: openId,
-        goodsId: that.goodsId
+          ccId: that.ccId,
+          method:"POST"
       }
     });
-    if (json.data.code == 0) {
+    if (json.data == "ok") {
       console.log("===========商品取消收藏成功=========")
       tip.toast("取消收藏成功");
       this.isFavorite = false;

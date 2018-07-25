@@ -89,3 +89,5 @@ export default class exchangeGoods extends wepy.page {
 }
 
 </script>
+<style lang="less">
+</style>

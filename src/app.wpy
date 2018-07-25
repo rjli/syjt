@@ -2,7 +2,6 @@
 @import "./styles/base";
 @import "./styles/icon";
 @import "./styles/style";
-
 </style>
 <script>
 import wepy from 'wepy';
@@ -40,7 +39,7 @@ export default class extends wepy.app {
       'pages/logistics',
       'pages/comment',
       'pages/comment_add',
-        'pages/investment'
+      'pages/investment'
     ],
     window: {
       backgroundTextStyle: 'dark',
@@ -93,5 +92,4 @@ export default class extends wepy.app {
 
   }
 }
-
 </script>

@@ -69,15 +69,8 @@ const getSignDate = (params) => wxRequest(params, apiMall + '/api/userSign/getSi
 //用户积分信息
 const pointInfo = (params) => wxRequest(params, apiMall + '/api/userPoint/pointInfo');
 
-//用户足迹信息
-const browseInfo = (params) => wxRequest(params, apiMall + '/api/userBrowse/browseInfo');
-//添加用户足迹
-const addBrowser = (params) => wxRequest(params, apiMall + '/api/userBrowse/add');
-//添加用户足迹
-const delUserBrowser = (params) => wxRequest(params, apiMall + '/api/userBrowse/delete');
-
 //用户收藏的商品
-const favoriteInfo = (params) => wxRequest(params, apiMall + '/api/goodsFavorite/favoriteInfo');
+const favoriteInfo = (params) => wxRequest(params, apiMall + '/Xcx-Shjt1-productShowColes');
 
 //用户消息
 const messageInfo = (params) => wxRequest(params, apiMall + '/api/systemMessage/messageInfo');
@@ -172,9 +165,6 @@ export default {
   preOrder,
   refundApply,
   pointInfo,
-  browseInfo,
-  addBrowser,
-  delUserBrowser,
   favoriteInfo,
   messageInfo,
   registerUser,

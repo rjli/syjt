@@ -1,84 +1,85 @@
 <style lang="less">
 .block {
-  background: #fff;
+    background: #fff;
 }
 
 .list_item {
-  display: flex;
-  align-items: center;
-  border-top: 1px solid #efefef;
-  padding: 35rpx 20rpx;
-  .title {
-    margin-right: 20rpx;
-  }
-  .input {
-    flex: 1;
-    input {
-      color: #333;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #efefef;
+    padding: 35rpx 20rpx;
+    .title {
+        margin-right: 20rpx;
     }
-  }
+    .input {
+        flex: 1;
+        input {
+            color: #333;
+        }
+    }
 }
 
 .btn_box {
-  margin-top: 64rpx;
-  padding: 0 24rpx;
+    margin-top: 64rpx;
+    padding: 0 24rpx;
 }
-
 </style>
 <template>
-  <form bindsubmit="formSubmit">
-    <view class="block">
-      <view class="list_item">
-        <view class="title">收货人姓名:</view>
-        <view class="input">
-          <input type="text" name="receiverName"  />
-        </view>
+<form bindsubmit="formSubmit">
+  <view class="block">
+    <view class="list_item">
+      <view class="title">收货人姓名:</view>
+      <view class="input">
+        <input type="text" name="receiverName" />
       </view>
-      <view class="list_item">
-        <view class="title">联系电话:</view>
-        <view class="input">
-          <input type="text" name="mobile" />
-        </view>
+    </view>
+    <view class="list_item">
+      <view class="title">联系电话:</view>
+      <view class="input">
+        <input type="text" name="mobile" />
       </view>
-      <view>
+    </view>
+    <view>
 
-      </view>
-      <view class="list_item">
-        <view class="title">所在地区: </view>
-        <view class="input">
-          <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+    </view>
+    <view class="list_item">
+      <view class="title">所在地区: </view>
+      <view class="input">
+        <view @tap="openAddressPicker">{{province ? province.name : '省'}} - {{city ? city.name : '市' }} - {{area ? area.name : '区' }}</view>
+        <areaPicker @areaArray.user="areaPickerArray"></areaPicker>
+        <!-- <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
               <view class="picker">
                  {{region[0]}} - {{region[1]}} - {{region[2]}}
               </view>
-            </picker>
-        </view>
+            </picker> -->
       </view>
-       <picker>
+    </view>
+    <picker>
 
-       </picker>
-      <view class="list_item">
-        <view class="title">邮政编码:</view>
-        <view class="input">
-          <input type="text" name="postcode" value="{{postcode}}"/>
-        </view>
+    </picker>
+    <view class="list_item">
+      <view class="title">邮政编码:</view>
+      <view class="input">
+        <input type="text" name="postcode" value="{{postcode}}" />
       </view>
-      <view class="list_item">
-        <view class="title">详细地址:</view>
-        <view class="input">
-          <input type="text" name="addressDetail"/>
-        </view>
+    </view>
+    <view class="list_item">
+      <view class="title">详细地址:</view>
+      <view class="input">
+        <input type="text" name="addressDetail" />
       </view>
-      <!-- <view class="list_item">
+    </view>
+    <!-- <view class="list_item">
         <view class="title">设置默认地址:</view>
         <view class="input tr" @tap="changeCheckBoxState">
           <icon type="success" size="20" color="{{isDefult? 'red':'#999'}}" />
         </view>
       </view> -->
-    </view>
-    <view class="btn_box">
-      <button class="button type_red" formType="submit">完成</button>
-    </view>
-  </form>
+  </view>
+  <view class="btn_box">
+    <button class="button type_red" formType="submit">完成</button>
+  </view>
+</form>
 </template>
 <script>
 import wepy from 'wepy';
@@ -89,15 +90,23 @@ import {
   USER_INFO,
   SYSTEM_ERROR
 } from '@/utils/constant';
+import AreaPicker from "./common/wepy-area-picker"
 export default class AddressAdd extends wepy.component {
   data = {
     isDefult: false,
     region: ['请选择', '请选择', '请选择'],
     customItem: '请选择',
-    postcode:''
+    postcode: '',
+    province: '',
+    city: '',
+    area: '',
+    provinceCode: '',
+    cityCode: '',
+    areaCode: ''
   }
 
   components = {
+    areaPicker: AreaPicker
   }
 
   async addAddress(formData) {
@@ -111,14 +120,15 @@ export default class AddressAdd extends wepy.component {
     let uid = userInfo.uid;
     const json = await api.saveAddress({
       query: {
-        user_id: uid,
-        receiver:formData.receiverName,
-        tel:formData.mobile,
-        sheng:that.region[0],
-        city:that.region[1],
-        quyu:that.region[2],
-        adds:formData.addressDetail,
-        code:formData.postcode
+        user_id:parseInt(uid),
+        receiver: formData.receiverName,
+        tel: parseInt(formData.mobile),
+        sheng: parseInt(that.provinceCode),
+        city: parseInt(that.cityCode),
+        quyu: parseInt(that.areaCode),
+        adds: formData.addressDetail,
+        code: parseInt(formData.postcode),
+        method:"POST"
       }
     });
     if (json.data.status == 1) {
@@ -142,7 +152,7 @@ export default class AddressAdd extends wepy.component {
       let receiverName = e.detail.value.receiverName;
       let mobile = e.detail.value.mobile;
       let addressDetail = e.detail.value.addressDetail;
-       let postcode =e.detail.value.postcode;
+      let postcode = e.detail.value.postcode;
       if (receiverName == "") {
         tip.alert("输入收件人姓名");
         return false;
@@ -155,25 +165,38 @@ export default class AddressAdd extends wepy.component {
       if (addressDetail == "") {
         tip.alert("输入详细地址");
         return false;
-      }if (postcode == "") {
+      }
+      if (postcode == "") {
         tip.alert("输入邮编");
         return false;
       }
       this.addAddress(e.detail.value);
     },
+    openAddressPicker() {
+      this.$invoke('areaPicker', 'openAddressPicker');
+    },
+    areaPickerArray(province, city, area, postcode) {
+      this.province = province;
+      this.city = city;
+      this.area = area;
+      this.provinceCode = province.id;
+      this.cityCode = city.id;
+      this.areaCode = area.id;
+      this.postcode = postcode;
+      console.log(this.area);
+    },
 
-    bindRegionChange: function (e) {
-      this.region= e.detail.value;
-      let _postcode =   postcodeUtil.findPostCode(this.region[0],this.region[1],this.region[2]);
-      console.log(_postcode);
-      this.postcode = _postcode;
-      this.$apply();
-    }
+    // bindRegionChange: function(e) {
+    //   this.region = e.detail.value;
+    //   let _postcode = postcodeUtil.findPostCode(this.region[0], this.region[1], this.region[2]);
+    //   console.log(_postcode);
+    //   this.postcode = _postcode;
+    //   this.$apply();
+    // }
   }
 
   onLoad() {
 
   }
 }
-
 </script>

@@ -139,13 +139,15 @@ const childGoodsCatetoryList = (params) => wxRequest(params, apiMall + '/Xcx-Shj
 const getAdList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt1-index');
 
 // 获取选择地址列表 begin  add 2018/07/22
-// // 获取省级数据
-// const getProvinceList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-addressGet_province');
-// // 获取市级数据
-// const getCityList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-addressGet_city');
-// // 获取区级、县级数据
-// const getAreaList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-addressGet_area');
+// 获取省级数据
+const getProvinceList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-addressGet_province');
+// 获取市级数据
+const getCityList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-addressGet_city');
+// 获取区级、县级数据
+const getAreaList = (params) => wxRequest(params, apiMall + '/Xcx-Shjt2-addressGet_area');
 
+// 获取邮政编码
+const getPostCode = (params) =>  wxRequest(params, apiMall + '/Xcx-Shjt2-addressGet_code');
 // 获取选择地址列表 end
 export default {
   hostGoodsList,
@@ -195,5 +197,9 @@ export default {
   getAdList,
   getSignDate,
   login,
-  userInfo
+  userInfo,
+  getProvinceList,
+  getCityList,
+  getAreaList,
+  getPostCode
 }

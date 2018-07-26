@@ -1,0 +1,303 @@
+<template>
+<view wx:if="{{show}}" class="cascade_box">
+  <view class="cascade_hei" animation="{{animationData.fadeAnim}}"></view>
+  <view class="cascade_find" animation="{{animationData.showAnim}}">
+    <view class="cascade_header">
+      <text class='quxiao' @tap="cancelPicker">取消</text>
+      <text class="queren" @tap="onAddressPick">确认</text>
+    </view>
+    <picker-view value="{{defaultValue}}" indicator-style="height: 80rpx;font-size: 38rpx" style="width: 100%; height: 400rpx;" bindchange="bindChange">
+      <picker-view-column class="pvc">
+        <view wx:for="{{provinces}}" wx:key='this' style="line-height: 80rpx;text-align:center;">{{item.name}}</view>
+      </picker-view-column>
+      <picker-view-column class="pvc">
+        <view wx:for="{{cities}}" wx:key='this' style="line-height: 80rpx;text-align:center;">{{item.name}}</view>
+      </picker-view-column>
+      <picker-view-column class="pvc">
+        <view wx:for="{{areas}}" wx:key='this' style="line-height: 80rpx;text-align:center;">{{item.name}}</view>
+      </picker-view-column>
+    </picker-view>
+  </view>
+</view>
+</template>
+<script>
+import wepy from 'wepy'
+import api from "@/api/api";
+// import regions from '@/utils/regions.js';
+
+export default class AreaPicker extends wepy.component {
+  data = {
+    provinces: [], //获取到的所有的省
+    cities: [], //选择的该省的所有市
+    areas: [], //选择的该市的所有区县
+    defaultValue: [0, 0, 0],
+    selectedRegion: [0, 0, 0],
+    animationData: {},
+    show: false,
+  }
+
+  setAddressPickerValue(province, city, area) {
+    this.province = province;
+    this.city = city;
+    this.area = area;
+    this.$apply();
+  }
+
+  showPicker() {
+    const fadeAnim = wepy.createAnimation({
+      duration: 500,
+      timingFunction: 'ease',
+    });
+    this.fadeAnim = fadeAnim;
+
+    const showAnim = wepy.createAnimation({
+      duration: 500,
+      timingFunction: 'ease',
+    });
+    this.showAnim = showAnim;
+
+    fadeAnim.backgroundColor('#000').opacity(0.5).step();
+    showAnim.bottom(0 + 'rpx').step();
+    this.show = true;
+    this.animationData = {
+      fadeAnim: fadeAnim.export(),
+      showAnim: showAnim.export(),
+    };
+
+    this.$apply();
+  }
+
+  hidePicker() {
+    this.fadeAnim.backgroundColor('#fff').opacity(0).step();
+    this.showAnim.bottom(-600 + 'rpx').step();
+
+
+    this.show = false;
+    this.animationData = {
+      fadeAnim: this.fadeAnim.export(),
+      showAnim: this.showAnim.export(),
+    };
+
+    this.$apply();
+
+  }
+
+  //点击事件，点击弹出选择页
+  openAddressPicker() {
+    this.getProvinceList();
+    this.showPicker();
+  }
+
+
+  methods = {
+    //取消按钮
+    cancelPicker() {
+      //这里也是动画，然其高度变为0
+      this.hidePicker();
+    },
+    //确认按钮
+    onAddressPick() {
+      //一样是动画，级联选择页消失，效果和取消一样
+      this.hidePicker();
+      const [provinceIndex, cityIndex, areaIndex] = this.selectedRegion;
+      const {
+        provinces,
+        cities,
+        areas
+      } = this;
+      this.province = provinces[provinceIndex];
+      this.city = cities[cityIndex];
+      this.area = areas[areaIndex] || {};
+      if (!this.area) {
+        this.area.name = "";
+        this.code.code = "";
+      }
+      console.log(this.city);
+      console.log(this.area);
+      this.getPostCode(this.province.id, areaIndex + 1);
+
+    },
+    //滚动选择的时候触发事件
+    bindChange(e) {
+      // 这里是获取picker-view内的picker-view-column 当前选择的是第几项
+      const val = e.detail.value;
+      //省变化，市区分别选中第一个
+      if (this.selectedRegion[0] != val[0]) {
+        this.getCityList(val);
+        this.selectedRegion = [val[0], 0, 0];
+        //市变化，区选中第一个
+      } else if (this.selectedRegion[1] != val[1]) {
+        this.getAreaList(val);
+        this.selectedRegion = [val[0], val[1], 0];
+        //区变化，省市不变
+      } else {
+        this.selectedRegion = val;
+      }
+      this.defaultValue = this.selectedRegion;
+      this.$apply();
+    }
+  }
+
+
+  async getProvinceList() {
+    const {
+      province,
+      city,
+      area
+    } = this;
+    this.province = province;
+    this.city = city;
+    this.area = area;
+    const json = await api.getProvinceList({
+      query: {}
+    });
+    if (json.data) {
+      //将省的数据存到provinces这个数组中
+      let provinces = json.data.list;
+      let defaultValue = this.defaultValue;
+      //检查传入的省编码是否有，有的话，选中column第一个游标为province index
+      provinces.some((item, index) => {
+        if (province && province.id == item.id) {
+          defaultValue[0] = index;
+          return true;
+        }
+      });
+      this.defaultValue = defaultValue;
+      this.selectedRegion = defaultValue;
+      this.provinces = provinces;
+      this.getCityList(defaultValue);
+      this.$apply();
+    } else {}
+  }
+
+  async getCityList(defaultValue) {
+    const json = await api.getCityList({
+      query: {
+        sheng: defaultValue[0] + 1
+      }
+    });
+    console.log(this.city);
+    if (json.data.status == 1) {
+      //将省的数据存到provinces这个数组中
+      let cities = json.data.city_list;
+      cities.some((item, index) => {
+        if (this.city && this.city.id == item.id) {
+          defaultValue[1] = index;
+          return true;
+        }
+      });
+      this.defaultValue = defaultValue;
+      this.selectedRegion = defaultValue;
+      this.cities = cities;
+      this.getAreaList(defaultValue);
+      this.$apply();
+    } else {}
+  }
+  // 获取区域数据
+  async getAreaList(defaultValue) {
+    console.log(this.area);
+    const json = await api.getAreaList({
+      query: {
+        sheng: this.provinces[defaultValue[0]].id,
+        city: defaultValue[1] + 1
+      }
+    });
+    if (json.data.status == 1) {
+      //将省的数据存到provinces这个数组中
+      let areas = json.data.area_list;
+      areas.some((item, index) => {
+        if (this.area && this.area.id == item.id) {
+          defaultValue[2] = index;
+          return true;
+        }
+      });
+      this.areas = areas;
+      this.selectedRegion = defaultValue;
+      this.$apply();
+    } else {}
+  }
+
+  // 获取邮政编码
+  async getPostCode(cityCode, areaCode) {
+    console.log("cityCode:" + cityCode + ";areaCode:" + areaCode);
+    const json = await api.getPostCode({
+      query: {
+        quyu: areaCode,
+        city: cityCode,
+        method: "POST"
+      }
+    })
+    let postcode;
+    console.log(json.data);
+    if (json.data.status == 1) {
+      postcode = json.data.code
+    }
+    this.$emit("areaArray", this.province, this.city, this.area, postcode)
+    this.$apply();
+  }
+  onLoad() {
+
+  }
+};
+</script>
+<style lang="less">
+.cascade_box {
+    font-size: 32rpx;
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 99999;
+}
+
+.cascade_hei {
+    width: 100%;
+    height: 100vh;
+    background: #fff;
+    opacity: 0;
+}
+
+.cascade_find {
+    width: 100%;
+    height: 600rpx;
+    position: fixed;
+    bottom: -600rpx;
+    left: 0;
+    background: #fff;
+    z-index: 99999;
+}
+
+.queren,
+.quxiao {
+    display: block;
+    position: absolute;
+    width: 100rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    /*background: #00f;*/
+    text-align: center;
+    color: #0CBB0A;
+}
+
+.quxiao {
+    color: #939393;
+}
+
+.queren {
+    right: 0;
+    top: 0;
+}
+
+.pvc {
+    font-size: 38rpx;
+}
+
+.cascade_header {
+    height: 80rpx;
+    width: 100%;
+    margin-bottom: 20rpx;
+}
+</style>
